@@ -6,7 +6,7 @@ devices at home with my Android smartphone. Requires an WiFi-enabled IR blaster
 that will be an Android Things Pi 3.
 
 Anybody reading this: a) you shouldn't b) do note that all of this is from the
-perspective of a complete hw noob - this is my first DIY project.
+perspective of a complete hw noob - this is my first DIY electronics project.
 
 Just notes for myself that I will use when doing a talk and/or a blogpost about
 this later.
