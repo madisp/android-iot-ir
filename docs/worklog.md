@@ -18,7 +18,7 @@ Day One
 -------
 
 Anyhoo, I got the Rpi3 running with the Android Things image. Very simple, just
-a simple `dd` to the microsd[1]. Once running I took a quick look around the OS.
+a simple `dd` to the microsd<sup>[1]</sup>. Once running I took a quick look around the OS.
 After booting the Pi I was greeted with a single screen rocking the Things logo
 and the `eth0` IP. After connecting ran `adb shellprop` to see what's up. The
 device is running API 24 / 7.0. Density is `mdpi`, i.e. `1dp == 1px`. Android
@@ -26,22 +26,22 @@ Studio just works, can run normal applications, can debug, can use JRA.
 
 GUI works normally and USB keyboard + mouse work for interaction as well.
 Apparently there is no launcher or settings app so configuring wifi requires
-firing a service intent with adb[2]. Standard doc didn't work because my SSID has
+firing a service intent with adb<sup>[2]</sup>. Standard doc didn't work because my SSID has
 a space in it and `adb shell` treats spaces (even when shellquoted) as separate
 args. Doing `adb shell` and then typing in the cmd worked though, yay, WiFi!
 
-The Things library itself is reasonably well documented[3] *but* I did not get
+The Things library itself is reasonably well documented<sup>[3]</sup> *but* I did not get
 javadoc working in the IDE. Which means keeping a browser tab open with the
 docs. This was to be expected, this is version `0.1-devpreview` after all :)
 
 First hurdle, I did expect to pretty much connect my IR led directly to a GPIO
 pin and be merrily off writing software. My IR LED is rated at 150mA and
-apparently you shouldn't try to drive more than 16mA from a GPIO pin[4]. OK, so
+apparently you shouldn't try to drive more than 16mA from a GPIO pin<sup>[4]</sup>. OK, so
 that means that I need a few resistors and a transistor to drive my LED safely
 from GPIO at around 100mA or more.
 
 Much larger hurdle though is the fact that I finally looked at the protocol my
-TV-remote uses. It's Philips RC-5[5]. It is a ~560 bits/sec manchester-encoding
+TV-remote uses. It's Philips RC-5<sup>[5]</sup>. It is a ~560 bits/sec manchester-encoding
 protocol that sits on top of a pulse-modulated 36khz carrier wave with a 25-33%
 duty cycle. That's a lot of buzzwords there, cowboy! Lets break it down to
 pieces.
@@ -116,7 +116,7 @@ Day Three
 Ok, plan for today is to actually hook up the LED with our transistor and the
 Nano and write some software that just turns on my TV. I found a nice webpage
 that explains why I need a resistor in the first place and how to calculate the
-required resistance[6]. I'm going to feed the LED with the 5V I get from Nano.
+required resistance<sup>[6]</sup>. I'm going to feed the LED with the 5V I get from Nano.
 My led has a forward voltage of 1.3V and it is rated at 150mA. So, to drive it
 from 5V I would need a resistance of `(5V-1.3V) / 0.15A = 24.7`. Ohm's law, yay!
 Haven't needed to use that one since high school :). I did have a 22ohm one
@@ -133,9 +133,9 @@ blinking and still lit bright while the Nano did not die in the process.
 Awesome!
 
 Next up writing some code. There is an IRlib for Arduino but I'd rather roll my
-own because it's fun. I found this example[7] that pulses a pin at 38khz 50%
+own because it's fun. I found this example<sup>[7]</sup> that pulses a pin at 38khz 50%
 duty cycle and repurposed it to build my own small script that keeps sending
-out the standby command in a loop[8]. It worked the first time I tried! I had
+out the standby command in a loop<sup>[8]</sup>. It worked the first time I tried! I had
 the unwieldiest TV-remote on the planet - a 24x20cm breadboard with a dangling
 USB cord that needed to be connected but I built it myself and it actually
 worked!
@@ -160,7 +160,7 @@ Also by looking at the pinouts of the Pi and the Nano I noticed that the GPIO
 pins on the Pi operate on 3.3V whereas the ones on my arduino board operate on
 5V. Turns out that I can get around this by getting a small logic level
 converter board that I can use to hook up the Pi to Nano. I ordered it and
-a new Arduino board as well - the Adafruit Trinket[9] because it is small and
+a new Arduino board as well - the Adafruit Trinket<sup>[9]</sup> because it is small and
 operates on 3.3V too so I could connect it directly to Pi.
 
 Finally figured I should start keeping a diary so that I could actually
