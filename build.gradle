@@ -1,0 +1,18 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.2.3'
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '3.3'
+}
+
+subprojects {
+  repositories {
+    jcenter()
+  }
+}
