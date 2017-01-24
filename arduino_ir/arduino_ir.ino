@@ -1,5 +1,5 @@
 
-const int IRLED = 3;
+const int IRLED = 2;
 unsigned int toggle = 0;
 
 void setup() {
@@ -33,14 +33,13 @@ void command(int cmd) {
   // address 0x0
   tx(0); tx(0); tx(0); tx(0); tx(0);
   // 6 bits for the cmd
-  for (int i = 0; i < 6; ++i) {
-    tx(cmd & 1);
-    cmd >>= 1;
+  for (int i = 5; i >= 0; --i) {
+    tx(cmd & (1<<i));
   }
 }
 
 void tx(int bit) {
-  if (bit == 1) {
+  if (bit != 0) {
     delayMicroseconds(884); // leave 5 usec for the call itself
     pulseIR(889);
   } else {
