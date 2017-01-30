@@ -1,25 +1,38 @@
+#include <Wire.h>
 
 const int IRLED = 2;
+const int PTT = 3;
 unsigned int toggle = 0;
 
 void setup() {
-  Serial.begin(9600);
   pinMode(IRLED, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(PTT, INPUT);
+  Wire.begin(8);
+  Wire.onReceive(wireEvent);
+  Serial.begin(9600);
+  Serial.println("Transmitter ready and waiting");
+}
+
+void wireEvent(int n) {
+  Serial.print("Received ");
+  Serial.print(n);
+  Serial.println(" bytes over Wire");
+  
+  while (Wire.available() < 2);
+  int addr = Wire.read();
+  int cmd = Wire.read();
+  Serial.print("Cmd received addr: ");
+  Serial.print(addr, HEX);
+  Serial.print(" cmd: ");
+  Serial.println(cmd, HEX);
+  command(addr, cmd);
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);
-  command(0x0c);
-  // show the led a bit longer
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  
-  // sleep a bit and try again
-  delay(5000);
+  delay(100);
 }
 
-void command(int cmd) {
+void command(int addr, int cmd) {
   if (toggle == 1) {
     toggle = 0;
   } else {
@@ -30,8 +43,10 @@ void command(int cmd) {
   tx(1); tx(1);
   // toggle bit 0
   tx(toggle);
-  // address 0x0
-  tx(0); tx(0); tx(0); tx(0); tx(0);
+  // 5 bits for addr
+  for (int i = 4; i >= 0; --i) {
+    tx(addr & (1<<i));
+  }
   // 6 bits for the cmd
   for (int i = 5; i >= 0; --i) {
     tx(cmd & (1<<i));

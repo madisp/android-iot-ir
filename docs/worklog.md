@@ -167,3 +167,47 @@ Finally figured I should start keeping a diary so that I could actually
 remember all of this later.
 
 [9]: https://www.adafruit.com/product/1500
+
+Day Five
+--------
+
+While waiting for the Trinket I started thinking about doing everything with
+the Pi using two NPN-transistors, the PWM0 and the UART port to modulate a
+signal without the need of precise timings in the userland. I didn't come up
+with this idea - thanks Dave. Also, thanks Taavi for being my rubber duck and
+letting me know that I'm not delusional in thinking that I could use
+transistors this way.
+
+The idea itself is quite simple and builds on what I've learned to connect the
+LED to the Arduino. I start with the 36khz 25% signal which I can easily get
+from PWM0. Then I feed that to a transistor base which collects from the +3.3V
+Pi output. Now I take that signal and send it to the next transistor collector
+where the base is connected to the UART TX pin, where I can essentially use the
+UART drivers to enable/disable the modulater 36khz signal. Since each RC-5
+command is 14 bits long (28 manchester-encoded half bits) I can abuse UART by
+just configuring it to 7 bits, 1125, no start or stop bits. This will give me
+the 889usec pulses 36khz modulated pulses I've been looking for.
+
+I also found this awesome website that has a Java applet that can animate
+what is up with your circuit. It even has a small oscilloscope function that
+can display the generated waveforms. I tested out my idea there and it looks
+like it should work<sup>[10]</sup>.
+
+[10]: http://tinyurl.com/jxnhfb2
+
+Day Six
+-------
+
+The trinket and logic level switcher have arrived but I'm going to try to do
+it without the Arduino first, as I planned yesterday. Not worried at all
+about stuff being left lying around as this is super interesting! I'm already
+thinking about what my next project is going to be :D
+
+OK, UART is not going to work! Apparently the hardware does not support setting
+no stop bits which I would require to send my signal correctly. However, maybe
+I can achieve the same thing using SPI.
+
+Few hours later - I couldn't get it to work. Still don't know why, checked that
+the circuit was OK but it just didn't work. Luckily I had both the Nano+LLC or
+the trinket. The latter needed soldering headers which I hadn't done for a
+while.

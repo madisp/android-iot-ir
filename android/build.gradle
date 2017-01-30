@@ -36,6 +36,10 @@ android {
 }
 
 dependencies {
+    compile 'commons-io:commons-io:2.5'
+
+    compile 'com.koushikdutta.async:androidasync:2.1.9'
+
     // compile against the things library
     provided 'com.google.android.things:androidthings:0.1-devpreview'
 }
