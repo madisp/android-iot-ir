@@ -3,7 +3,10 @@ package pink.madis.things.ir.devices
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.simpleframework.xml.core.Persister
-import pink.madis.things.ir.devices.yamaha.StatusReply
+import org.simpleframework.xml.stream.Format
+import pink.madis.things.ir.devices.yamaha.*
+import java.io.ByteArrayOutputStream
+import java.nio.charset.StandardCharsets
 
 const val mainZoneBasicStatus: String = """
 <YAMAHA_AV RC="0" rsp="GET">
@@ -177,5 +180,45 @@ class YamahaRxvTest {
             assertThat(it.Basic_Status.Volume.Mute).isEqualTo(false)
             assertThat(it.Basic_Status.Sound_Video).isNull()
         }
+    }
+
+    @Test
+    fun testQueryStatus() {
+        val xml = Persister(Format(0))
+        val command = Command("GET", ZoneCommand("GetParam", null, null, null), null)
+        val baos = ByteArrayOutputStream()
+        xml.write(command, baos, "UTF-8")
+        val commandString = String(baos.toByteArray(), StandardCharsets.UTF_8)
+        assertThat(commandString).isEqualTo("<YAMAHA_AV cmd=\"GET\"><Main_Zone><Basic_Status>GetParam</Basic_Status></Main_Zone></YAMAHA_AV>")
+    }
+
+    @Test
+    fun testPutPower() {
+        val xml = Persister(Format(0))
+        val command = Command("PUT", ZoneCommand(null, PowerControl("On", null), null, null), null)
+        val baos = ByteArrayOutputStream()
+        xml.write(command, baos, "UTF-8")
+        val commandString = String(baos.toByteArray(), StandardCharsets.UTF_8)
+        assertThat(commandString).isEqualTo("<YAMAHA_AV cmd=\"PUT\"><Main_Zone><Power_Control><Power>On</Power></Power_Control></Main_Zone></YAMAHA_AV>")
+    }
+
+    @Test
+    fun testSelectInput() {
+        val xml = Persister(Format(0))
+        val command = Command("PUT", ZoneCommand(null, null, Input("Spotify"), null), null)
+        val baos = ByteArrayOutputStream()
+        xml.write(command, baos, "UTF-8")
+        val commandString = String(baos.toByteArray(), StandardCharsets.UTF_8)
+        assertThat(commandString).isEqualTo("<YAMAHA_AV cmd=\"PUT\"><Main_Zone><Input><Input_Sel>Spotify</Input_Sel></Input></Main_Zone></YAMAHA_AV>")
+    }
+
+    @Test
+    fun testPutVolume() {
+        val xml = Persister(Format(0))
+        val command = Command("PUT", ZoneCommand(null, null, null, Volume(VolumeLevel(-600, 1, "dB"), null)), null)
+        val baos = ByteArrayOutputStream()
+        xml.write(command, baos, "UTF-8")
+        val commandString = String(baos.toByteArray(), StandardCharsets.UTF_8)
+        assertThat(commandString).isEqualTo("<YAMAHA_AV cmd=\"PUT\"><Main_Zone><Volume><Lvl><Val>-600</Val><Exp>1</Exp><Unit>dB</Unit></Lvl></Volume></Main_Zone></YAMAHA_AV>")
     }
 }

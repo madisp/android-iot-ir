@@ -4,7 +4,24 @@ import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
 
-@Root(strict = false)
+@Root(name = "YAMAHA_AV")
+data class Command(
+        @field:Attribute var cmd: String,
+        @field:Element(required = false) var Main_Zone: ZoneCommand?,
+        @field:Element(required = false) var Zone_2: ZoneCommand?
+) {
+    constructor() : this("", null, null)
+}
+
+data class ZoneCommand(
+        @field:Element(required = false) var Basic_Status: String?,
+        @field:Element(required = false) var Power_Control: PowerControl?,
+        @field:Element(required = false) var Input: Input?,
+        @field:Element(required = false) var Volume: Volume?
+) {
+    constructor() : this(null, null, null, null)
+}
+
 data class StatusReply(
         @field:Element(required = false) var Main_Zone: Zone?,
         @field:Element(required = false) var Zone_2: Zone?,
@@ -33,15 +50,15 @@ data class BasicStatus(
 
 data class PowerControl(
         @field:Element var Power: String,
-        @field:Element var Sleep: Boolean
+        @field:Element(required = false) var Sleep: Boolean?
 ) {
-    constructor(): this("", false)
+    constructor(): this("", null)
 }
 
 @Root(strict = false)
 data class Volume(
         @field:Element var Lvl: VolumeLevel,
-        @field:Element var Mute: Boolean
+        @field:Element(required = false) var Mute: Boolean?
 ) {
     constructor(): this(VolumeLevel(), false)
 }
