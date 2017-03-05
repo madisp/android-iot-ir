@@ -42,10 +42,5 @@ class HomeTest {
     }
 }
 
-internal class FakeReceiver(var input: String): AvReceiver {
-    override fun switchTo(input: String) {
-        this.input = input
-    }
-}
-
-internal class FakeDevice(override var state: State) : Device
+internal class FakeReceiver(override var input: String): AvReceiver
+internal class FakeDevice(override var state: State): Device

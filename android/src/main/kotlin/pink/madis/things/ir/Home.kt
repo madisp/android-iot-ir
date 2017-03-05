@@ -13,6 +13,6 @@ class Home(val avReceiver: AvReceiver, val devices: List<Device>) {
                 it.state = State.STANDBY
             }
         }
-        avReceiver.switchTo(p.avInput)
+        avReceiver.input = p.avInput
     }
 }
